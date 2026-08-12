@@ -21,16 +21,10 @@ GoRouter buildAppRouter(AppState appState) {
       GoRoute(
         path: '/detail/:id',
         name: 'detail',
-        builder: (context, state) {
-          // On récupère l'objet complet passé en `extra` (plus simple pour
-          // une débutante que de re-fetch par id depuis une source distante).
-          final item = state.extra as Watchable? ??
-              appState.items.firstWhere(
-                (w) => w.id == state.pathParameters['id'],
-                orElse: () => appState.items.first,
-              );
-          return DetailScreen(item: item, appState: appState);
-        },
+        builder: (context, state) => DetailScreen(
+          itemId: state.pathParameters['id']!,
+          appState: appState,
+        ),
       ),
       GoRoute(
         path: '/add',

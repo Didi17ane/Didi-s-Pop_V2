@@ -23,6 +23,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon/app_icon.png
+    - assets/avatar/default_avatar.png
 
 # Config pour générer l'icône de l'app (voir README, étape "Icône de l'app").
 flutter_launcher_icons:

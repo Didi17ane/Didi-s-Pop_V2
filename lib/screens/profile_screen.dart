@@ -59,7 +59,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 const CircleAvatar(
                   radius: 36,
-                  child: Icon(Icons.person, size: 36),
+                  backgroundColor: Colors.transparent,
+                  backgroundImage:
+                      AssetImage('assets/avatar/default_avatar.png'),
                 ),
                 const SizedBox(height: 20),
                 const SectionTitle(text: 'Ton prénom'),

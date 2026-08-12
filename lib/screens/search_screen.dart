@@ -84,7 +84,20 @@ class _SearchScreenState extends State<SearchScreen> {
                             title: Text(item.title),
                             subtitle: Padding(
                               padding: const EdgeInsets.only(top: 6),
-                              child: CategoryChip(category: item.category),
+                              child: Wrap(
+                                spacing: 6,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  CategoryChip(category: item.category),
+                                  Text(
+                                    item.status.label,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
