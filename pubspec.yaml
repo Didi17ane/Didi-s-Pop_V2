@@ -1,0 +1,37 @@
+name: didis_pop
+description: "Didi's Pop — app K-drama & Anime"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  go_router: ^14.2.0
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icon/app_icon.png
+
+# Config pour générer l'icône de l'app (voir README, étape "Icône de l'app").
+flutter_launcher_icons:
+  android: true
+  ios: false # pas de dossier ios/ dans ce projet ; passe à true si tu en ajoutes un
+  image_path: "assets/icon/app_icon.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/icon/app_icon.png"
+    background_color: "#FDF0EE"
+    theme_color: "#9A5CB4"
