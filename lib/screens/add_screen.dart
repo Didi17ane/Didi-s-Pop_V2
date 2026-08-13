@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../app_state.dart';
 import '../models/watchable.dart';
+import '../widgets/star_rating.dart';
 
 class AddScreen extends StatefulWidget {
   final AppState appState;
@@ -17,9 +18,9 @@ class _AddScreenState extends State<AddScreen> {
   final _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _titleController;
-  late final TextEditingController _ratingController;
   late final TextEditingController _synopsisController;
-  late Category _category;
+  late String _categoryId;
+  late int _stars; // 1 à 5 ; converti en note /10 au moment d'enregistrer
 
   bool get _isEditing => widget.editingItem != null;
 
@@ -28,17 +29,18 @@ class _AddScreenState extends State<AddScreen> {
     super.initState();
     final existing = widget.editingItem;
     _titleController = TextEditingController(text: existing?.title ?? '');
-    _ratingController =
-        TextEditingController(text: existing?.rating.toString() ?? '');
     _synopsisController =
         TextEditingController(text: existing?.synopsis ?? '');
-    _category = existing?.category ?? Category.kdrama;
+    // Catégorie existante, ou la première disponible par défaut (il y en a
+    // toujours au moins une : K-drama et Anime sont créées au 1er lancement).
+    _categoryId = existing?.categoryId ?? widget.appState.categories.first.id;
+    // La note est stockée en interne sur 0-10 ; on l'affiche/édite en 1-5 étoiles.
+    _stars = existing != null ? (existing.rating / 2).round().clamp(1, 5) : 5;
   }
 
   @override
   void dispose() {
     _titleController.dispose();
-    _ratingController.dispose();
     _synopsisController.dispose();
     super.dispose();
   }
@@ -52,8 +54,8 @@ class _AddScreenState extends State<AddScreen> {
     final item = Watchable(
       id: existing?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
       title: _titleController.text.trim(),
-      category: _category,
-      rating: double.parse(_ratingController.text),
+      categoryId: _categoryId,
+      rating: (_stars * 2).toDouble(),
       imageUrl: existing?.imageUrl ??
           'https://picsum.photos/seed/${_titleController.text}/300/420',
       synopsis: synopsis.isEmpty
@@ -103,18 +105,18 @@ class _AddScreenState extends State<AddScreen> {
                 ),
                 const SizedBox(height: 16),
                 // Champ 2 : catégorie
-                DropdownButtonFormField<Category>(
-                  initialValue: _category,
+                DropdownButtonFormField<String>(
+                  initialValue: _categoryId,
                   decoration: const InputDecoration(
                     labelText: 'Catégorie',
                     border: OutlineInputBorder(),
                   ),
-                  items: Category.values
-                      .map((c) =>
-                          DropdownMenuItem(value: c, child: Text(c.label)))
+                  items: widget.appState.categories
+                      .map((c) => DropdownMenuItem(
+                          value: c.id, child: Text(c.name)))
                       .toList(),
                   onChanged: (value) {
-                    if (value != null) setState(() => _category = value);
+                    if (value != null) setState(() => _categoryId = value);
                   },
                 ),
                 const SizedBox(height: 16),
@@ -129,25 +131,13 @@ class _AddScreenState extends State<AddScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                // Champ 4 : note
-                TextFormField(
-                  controller: _ratingController,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(
-                    labelText: 'Note (0 à 10)',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'La note est obligatoire';
-                    }
-                    final parsed = double.tryParse(value);
-                    if (parsed == null || parsed < 0 || parsed > 10) {
-                      return 'Entre 0 et 10 uniquement';
-                    }
-                    return null;
-                  },
+                // Champ 4 : note (1 à 5 étoiles)
+                const Text('Note', style: TextStyle(fontSize: 14)),
+                const SizedBox(height: 4),
+                StarRating(
+                  value: _stars.toDouble(),
+                  size: 32,
+                  onChanged: (stars) => setState(() => _stars = stars),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(

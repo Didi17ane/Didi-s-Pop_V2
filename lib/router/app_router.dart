@@ -35,12 +35,20 @@ GoRouter buildAppRouter(AppState appState) {
         path: '/edit/:id',
         name: 'edit',
         builder: (context, state) {
-          final item = state.extra as Watchable? ??
-              appState.items.firstWhere(
-                (w) => w.id == state.pathParameters['id'],
-                orElse: () => appState.items.first,
-              );
-          return AddScreen(appState: appState, editingItem: item);
+          // On ne fait jamais confiance à `extra` : sur certains cas
+          // (rechargement web, hot-reload), Flutter le restaure comme un
+          // Map JSON brut plutôt que le vrai objet Watchable, ce qui
+          // provoquait un crash au cast. On va toujours chercher l'item
+          // à jour dans appState par son id à la place.
+          final id = state.pathParameters['id']!;
+          Watchable? existing;
+          for (final w in appState.items) {
+            if (w.id == id) {
+              existing = w;
+              break;
+            }
+          }
+          return AddScreen(appState: appState, editingItem: existing);
         },
       ),
     ],

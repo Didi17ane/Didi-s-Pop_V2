@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:didis_pop/widgets/category_chip.dart';
-import 'package:didis_pop/models/watchable.dart';
+import 'package:didis_pop/models/app_category.dart';
 
 void main() {
   group('CategoryChip Widget', () {
     testWidgets('CategoryChip displays correct label for K-drama',
         (WidgetTester tester) async {
+      const category =
+          AppCategory(id: 'kdrama', name: 'K-drama', colorValue: 0xFF9A5CB4);
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
-            body: CategoryChip(category: Category.kdrama),
+            body: CategoryChip(category: category),
           ),
         ),
       );
@@ -20,10 +22,12 @@ void main() {
 
     testWidgets('CategoryChip displays correct label for Anime',
         (WidgetTester tester) async {
+      const category =
+          AppCategory(id: 'anime', name: 'Anime', colorValue: 0xFFF4A8C0);
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
-            body: CategoryChip(category: Category.anime),
+            body: CategoryChip(category: category),
           ),
         ),
       );

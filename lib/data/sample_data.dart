@@ -9,7 +9,7 @@ class SampleData {
       const Watchable(
         id: '1',
         title: 'Crash Landing on You',
-        category: Category.kdrama,
+        categoryId: 'kdrama',
         rating: 9.1,
         imageUrl: 'https://picsum.photos/seed/cloy/300/420',
         synopsis:
@@ -19,7 +19,7 @@ class SampleData {
       const Watchable(
         id: '2',
         title: 'Demon Slayer',
-        category: Category.anime,
+        categoryId: 'anime',
         rating: 8.9,
         imageUrl: 'https://picsum.photos/seed/demonslayer/300/420',
         synopsis:
@@ -29,7 +29,7 @@ class SampleData {
       const Watchable(
         id: '3',
         title: 'Goblin',
-        category: Category.kdrama,
+        categoryId: 'kdrama',
         rating: 8.7,
         imageUrl: 'https://picsum.photos/seed/goblin/300/420',
         synopsis:
@@ -39,7 +39,7 @@ class SampleData {
       const Watchable(
         id: '4',
         title: 'Attack on Titan',
-        category: Category.anime,
+        categoryId: 'anime',
         rating: 9.0,
         imageUrl: 'https://picsum.photos/seed/aot/300/420',
         synopsis:
@@ -49,7 +49,7 @@ class SampleData {
       const Watchable(
         id: '5',
         title: 'Itaewon Class',
-        category: Category.kdrama,
+        categoryId: 'kdrama',
         rating: 8.5,
         imageUrl: 'https://picsum.photos/seed/itaewon/300/420',
         synopsis:
@@ -59,7 +59,7 @@ class SampleData {
       const Watchable(
         id: '6',
         title: 'Your Name',
-        category: Category.anime,
+        categoryId: 'anime',
         rating: 9.3,
         imageUrl: 'https://picsum.photos/seed/yourname/300/420',
         synopsis:

@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
-import '../models/watchable.dart';
-import '../theme/app_theme.dart';
+import '../models/app_category.dart';
 
-/// Petit badge coloré affichant "K-drama" ou "Anime".
+/// Petit badge coloré affichant le nom d'une catégorie (K-drama, Anime,
+/// ou toute catégorie personnalisée créée par l'utilisatrice).
 /// Réutilisable partout où on affiche un Watchable.
 class CategoryChip extends StatelessWidget {
-  final Category category;
+  final AppCategory category;
 
   const CategoryChip({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
-    final color = category == Category.kdrama
-        ? AppColors.purpleAccent
-        : AppColors.pinkAccent;
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.85),
+        color: category.color.withOpacity(0.85),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        category.label,
+        category.name,
         style: const TextStyle(
           color: Colors.white,
           fontSize: 12,

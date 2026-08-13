@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../app_state.dart';
-import '../models/watchable.dart';
 import '../widgets/section_title.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -32,21 +31,83 @@ class _ProfileScreenState extends State<ProfileScreen> {
     widget.appState.setUserName(_nameController.text);
   }
 
+  Future<void> _openAddCategoryDialog() async {
+    final controller = TextEditingController();
+    final name = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Nouvelle catégorie'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: const InputDecoration(
+            hintText: 'Ex: Film, Manga, Documentaire...',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(controller.text),
+            child: const Text('Ajouter'),
+          ),
+        ],
+      ),
+    );
+
+    if (name != null && name.trim().isNotEmpty) {
+      await widget.appState.addCategory(name);
+    }
+  }
+
+  Future<void> _confirmDeleteCategory(
+      BuildContext context, String categoryId, String categoryName) async {
+    final count = widget.appState.itemCountForCategory(categoryId);
+    final message = count > 0
+        ? 'Cette catégorie contient $count titre${count > 1 ? 's' : ''}. '
+            'La supprimer supprimera aussi ces titres définitivement.'
+        : 'Supprimer la catégorie "$categoryName" ?';
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Supprimer "$categoryName" ?'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child:
+                const Text('Supprimer', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await widget.appState.deleteCategory(categoryId);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: widget.appState,
       builder: (context, _) {
         final items = widget.appState.items;
-        final kdramaCount =
-            items.where((w) => w.category == Category.kdrama).length;
-        final animeCount =
-            items.where((w) => w.category == Category.anime).length;
+        final categories = widget.appState.categories;
 
         // Si le prénom a changé ailleurs, on garde le champ synchronisé
         // sans écraser ce que l'utilisatrice est en train de taper.
         final fieldHasFocus = FocusScope.of(context).hasFocus;
-        if (!fieldHasFocus && _nameController.text != widget.appState.userName) {
+        if (!fieldHasFocus &&
+            _nameController.text != widget.appState.userName) {
           _nameController.text = widget.appState.userName;
         }
 
@@ -80,17 +141,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onSubmitted: (_) => _saveName(),
                 ),
                 const SizedBox(height: 24),
+
                 const SectionTitle(text: 'Statistiques'),
-                Row(
-                  children: [
-                    _StatCard(label: 'Total', value: '${items.length}'),
-                    const SizedBox(width: 12),
-                    _StatCard(label: 'K-drama', value: '$kdramaCount'),
-                    const SizedBox(width: 12),
-                    _StatCard(label: 'Anime', value: '$animeCount'),
-                  ],
+                SizedBox(
+                  height: 90,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      _StatCard(label: 'Total', value: '${items.length}'),
+                      for (final cat in categories) ...[
+                        const SizedBox(width: 12),
+                        _StatCard(
+                          label: cat.name,
+                          value:
+                              '${widget.appState.itemCountForCategory(cat.id)}',
+                          color: cat.color,
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 24),
+
+                Row(
+                  children: [
+                    const SectionTitle(text: 'Mes catégories'),
+                    const Spacer(),
+                    IconButton(
+                      icon: const Icon(Icons.add_circle_outline),
+                      tooltip: 'Ajouter une catégorie',
+                      onPressed: _openAddCategoryDialog,
+                    ),
+                  ],
+                ),
+                for (final cat in categories)
+                  Card(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 12,
+                        backgroundColor: cat.color,
+                      ),
+                      title: Text(cat.name),
+                      subtitle: Text(
+                        '${widget.appState.itemCountForCategory(cat.id)} titre(s)',
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete_outline),
+                        tooltip: 'Supprimer',
+                        onPressed: () =>
+                            _confirmDeleteCategory(context, cat.id, cat.name),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 16),
+
                 const SectionTitle(text: 'Préférences'),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
@@ -112,22 +217,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
 class _StatCard extends StatelessWidget {
   final String label;
   final String value;
+  final Color? color;
 
-  const _StatCard({required this.label, required this.value});
+  const _StatCard({required this.label, required this.value, this.color});
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return SizedBox(
+      width: 100,
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(value,
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                  )),
               const SizedBox(height: 4),
-              Text(label, style: const TextStyle(fontSize: 12)),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12),
+              ),
             ],
           ),
         ),

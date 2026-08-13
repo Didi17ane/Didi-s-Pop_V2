@@ -88,7 +88,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                 spacing: 6,
                                 crossAxisAlignment: WrapCrossAlignment.center,
                                 children: [
-                                  CategoryChip(category: item.category),
+                                  CategoryChip(
+                                      category: widget.appState
+                                          .categoryFor(item.categoryId)),
                                   Text(
                                     item.status.label,
                                     style: TextStyle(
@@ -105,7 +107,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 const Icon(Icons.star,
                                     color: Colors.amber, size: 16),
                                 const SizedBox(width: 2),
-                                Text(item.rating.toStringAsFixed(1)),
+                                Text((item.rating / 2).toStringAsFixed(1)),
                               ],
                             ),
                             onTap: () => context.push('/detail/${item.id}',

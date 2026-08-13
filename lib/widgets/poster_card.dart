@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import '../models/app_category.dart';
 import '../models/watchable.dart';
 import 'category_chip.dart';
 
 /// Carte affichant le poster, le titre et la catégorie d'un Watchable.
 /// Utilisée dans la grille de l'accueil. Réutilisable et sans donnée en dur :
-/// tout vient du Watchable passé en paramètre.
+/// tout vient du Watchable et de la catégorie passés en paramètre.
+/// [category] est résolue par l'écran appelant (via AppState.categoryFor),
+/// car PosterCard n'a pas directement accès à AppState.
 class PosterCard extends StatelessWidget {
   final Watchable item;
+  final AppCategory category;
   final VoidCallback onTap;
 
-  const PosterCard({super.key, required this.item, required this.onTap});
+  const PosterCard({
+    super.key,
+    required this.item,
+    required this.category,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +44,7 @@ class PosterCard extends StatelessWidget {
             Positioned(
               top: 8,
               left: 8,
-              child: CategoryChip(category: item.category),
+              child: CategoryChip(category: category),
             ),
             Positioned(
               top: 8,
@@ -71,7 +80,7 @@ class PosterCard extends StatelessWidget {
                     const Icon(Icons.star, color: Colors.amber, size: 14),
                     const SizedBox(width: 2),
                     Text(
-                      item.rating.toStringAsFixed(1),
+                      (item.rating / 2).toStringAsFixed(1),
                       style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ],

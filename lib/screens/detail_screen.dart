@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../app_state.dart';
 import '../models/watchable.dart';
 import '../widgets/category_chip.dart';
+import '../widgets/star_rating.dart';
 
 class DetailScreen extends StatelessWidget {
   final String itemId;
@@ -75,8 +76,7 @@ class DetailScreen extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.edit),
                     tooltip: 'Modifier',
-                    onPressed: () => context
-                        .push('/edit/${current.id}', extra: current),
+                    onPressed: () => context.push('/edit/${current.id}'),
                   ),
                   IconButton(
                     icon: const Icon(Icons.delete_outline),
@@ -99,7 +99,8 @@ class DetailScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CategoryChip(category: current.category),
+                      CategoryChip(
+                          category: appState.categoryFor(current.categoryId)),
                       const SizedBox(height: 12),
                       Text(
                         current.title,
@@ -109,10 +110,9 @@ class DetailScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          const Icon(Icons.star,
-                              color: Colors.amber, size: 18),
-                          const SizedBox(width: 4),
-                          Text('${current.rating.toStringAsFixed(1)} / 10'),
+                          StarRating(value: current.rating / 2, size: 20),
+                          const SizedBox(width: 8),
+                          Text('${(current.rating / 2).toStringAsFixed(1)} / 5'),
                         ],
                       ),
                       const SizedBox(height: 16),

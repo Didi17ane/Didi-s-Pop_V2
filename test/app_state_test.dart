@@ -28,7 +28,7 @@ void main() {
       final newItem = Watchable(
         id: 'test-id',
         title: 'New Title',
-        category: Category.kdrama,
+        categoryId: 'kdrama',
         rating: 8.0,
         imageUrl: 'https://example.com/image.jpg',
         synopsis: 'New synopsis',

@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:didis_pop/models/watchable.dart';
+import 'package:didis_pop/models/app_category.dart';
 
 void main() {
   group('Watchable Model', () {
@@ -7,7 +8,7 @@ void main() {
       final watchable = Watchable(
         id: '1',
         title: 'Test Title',
-        category: Category.kdrama,
+        categoryId: 'kdrama',
         rating: 8.5,
         imageUrl: 'https://example.com/image.jpg',
         synopsis: 'Test synopsis',
@@ -15,22 +16,23 @@ void main() {
 
       expect(watchable.id, '1');
       expect(watchable.title, 'Test Title');
-      expect(watchable.category, Category.kdrama);
+      expect(watchable.categoryId, 'kdrama');
       expect(watchable.rating, 8.5);
       expect(watchable.imageUrl, 'https://example.com/image.jpg');
       expect(watchable.synopsis, 'Test synopsis');
     });
 
-    test('Category label is correct', () {
-      expect(Category.kdrama.label, 'K-drama');
-      expect(Category.anime.label, 'Anime');
+    test('Default categories have the expected names', () {
+      final defaults = AppCategory.defaults();
+      expect(defaults.firstWhere((c) => c.id == 'kdrama').name, 'K-drama');
+      expect(defaults.firstWhere((c) => c.id == 'anime').name, 'Anime');
     });
 
     test('Rating can be 0 to 10', () {
       final watchable1 = Watchable(
         id: '1',
         title: 'Low Rating',
-        category: Category.anime,
+        categoryId: 'anime',
         rating: 0,
         imageUrl: 'https://example.com/image.jpg',
         synopsis: 'Test',
@@ -39,7 +41,7 @@ void main() {
       final watchable2 = Watchable(
         id: '2',
         title: 'High Rating',
-        category: Category.anime,
+        categoryId: 'anime',
         rating: 10,
         imageUrl: 'https://example.com/image.jpg',
         synopsis: 'Test',
