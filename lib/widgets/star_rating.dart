@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 /// Rangée de 5 étoiles. En lecture seule si [onChanged] est null,
-/// sinon chaque étoile devient tapable pour choisir une note de 1 à 5.
+/// sinon chaque étoile devient tapable pour choisir une note entière de 1 à 5.
 class StarRating extends StatelessWidget {
-  final double value; // 0 à 5, peut être décimal en lecture seule
+  final double value; // 0 à 5 (entier en mode sélection)
   final double size;
   final ValueChanged<int>? onChanged;
 

@@ -59,7 +59,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
 
     if (name != null && name.trim().isNotEmpty) {
-      await widget.appState.addCategory(name);
+      final error = await widget.appState.addCategory(name);
+      if (error != null && mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error)));
+      }
     }
   }
 
@@ -165,7 +169,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 Row(
                   children: [
-                    const SectionTitle(text: 'Mes catégories'),
+                    SectionTitle(
+                      text:
+                          'Mes catégories (${categories.length}/${AppState.maxCategories})',
+                    ),
                     const Spacer(),
                     IconButton(
                       icon: const Icon(Icons.add_circle_outline),

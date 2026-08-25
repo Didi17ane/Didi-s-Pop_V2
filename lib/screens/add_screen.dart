@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../app_state.dart';
 import '../models/watchable.dart';
+import '../services/poster_service.dart';
 import '../widgets/star_rating.dart';
 
 class AddScreen extends StatefulWidget {
@@ -19,8 +20,10 @@ class _AddScreenState extends State<AddScreen> {
 
   late final TextEditingController _titleController;
   late final TextEditingController _synopsisController;
+  late final TextEditingController _imageUrlController;
   late String _categoryId;
   late int _stars; // 1 à 5 ; converti en note /10 au moment d'enregistrer
+  bool _isSaving = false;
 
   bool get _isEditing => widget.editingItem != null;
 
@@ -29,8 +32,8 @@ class _AddScreenState extends State<AddScreen> {
     super.initState();
     final existing = widget.editingItem;
     _titleController = TextEditingController(text: existing?.title ?? '');
-    _synopsisController =
-        TextEditingController(text: existing?.synopsis ?? '');
+    _synopsisController = TextEditingController(text: existing?.synopsis ?? '');
+    _imageUrlController = TextEditingController(text: existing?.imageUrl ?? '');
     // Catégorie existante, ou la première disponible par défaut (il y en a
     // toujours au moins une : K-drama et Anime sont créées au 1er lancement).
     _categoryId = existing?.categoryId ?? widget.appState.categories.first.id;
@@ -42,36 +45,52 @@ class _AddScreenState extends State<AddScreen> {
   void dispose() {
     _titleController.dispose();
     _synopsisController.dispose();
+    _imageUrlController.dispose();
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isSaving = true);
+
+    final title = _titleController.text.trim();
+    var imageUrl = _imageUrlController.text.trim();
+
+    // Si aucune image n'a été collée à la main, on cherche automatiquement
+    // la vraie affiche correspondant au titre. Si rien n'est trouvé (ou
+    // pas de connexion), on retombe sur l'image aléatoire comme avant.
+    if (imageUrl.isEmpty) {
+      final found = await PosterService.fetchPosterFor(
+        title: title,
+        categoryId: _categoryId,
+      );
+      imageUrl = found ?? 'https://picsum.photos/seed/$title/300/420';
+    }
+
+    if (!mounted) return;
 
     final synopsis = _synopsisController.text.trim();
     final existing = widget.editingItem;
 
     final item = Watchable(
       id: existing?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
-      title: _titleController.text.trim(),
+      title: title,
       categoryId: _categoryId,
       rating: (_stars * 2).toDouble(),
-      imageUrl: existing?.imageUrl ??
-          'https://picsum.photos/seed/${_titleController.text}/300/420',
-      synopsis: synopsis.isEmpty
-          ? 'Ajouté par Didi. Synopsis à compléter.'
-          : synopsis,
+      imageUrl: imageUrl,
+      synopsis: synopsis.isEmpty ? 'Synopsis à compléter.' : synopsis,
     );
 
     if (_isEditing) {
       widget.appState.updateItem(item);
       // On revient au détail (qui affichera la version à jour).
-      context.pop();
+      if (mounted) context.pop();
     } else {
       widget.appState.addItem(item);
       // On revient directement à l'accueil (et pas juste "en arrière"),
       // pour être sûres de retomber sur la liste à jour.
-      context.go('/');
+      if (mounted) context.go('/');
     }
   }
 
@@ -112,8 +131,8 @@ class _AddScreenState extends State<AddScreen> {
                     border: OutlineInputBorder(),
                   ),
                   items: widget.appState.categories
-                      .map((c) => DropdownMenuItem(
-                          value: c.id, child: Text(c.name)))
+                      .map((c) =>
+                          DropdownMenuItem(value: c.id, child: Text(c.name)))
                       .toList(),
                   onChanged: (value) {
                     if (value != null) setState(() => _categoryId = value);
@@ -126,12 +145,29 @@ class _AddScreenState extends State<AddScreen> {
                   maxLines: 4,
                   decoration: const InputDecoration(
                     labelText: 'Synopsis',
-                    hintText: 'Ajouté par Didi. Synopsis à compléter.',
+                    hintText: 'Synopsis à compléter.',
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16),
-                // Champ 4 : note (1 à 5 étoiles)
+                // Champ 4 : image (optionnel)
+                TextFormField(
+                  controller: _imageUrlController,
+                  decoration: const InputDecoration(
+                    labelText: 'Image (URL) — optionnel',
+                    hintText: 'Laisse vide pour une recherche automatique',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.url,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Si tu ne colles pas d\'URL, on cherche automatiquement '
+                  'la vraie affiche du titre.',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                ),
+                const SizedBox(height: 16),
+                // Champ 5 : note (1 à 5 étoiles)
                 const Text('Note', style: TextStyle(fontSize: 14)),
                 const SizedBox(height: 4),
                 StarRating(
@@ -141,10 +177,19 @@ class _AddScreenState extends State<AddScreen> {
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: _submit,
+                  onPressed: _isSaving ? null : _submit,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Text(_isEditing ? 'Mettre à jour' : 'Enregistrer'),
+                    child: _isSaving
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text(_isEditing ? 'Mettre à jour' : 'Enregistrer'),
                   ),
                 ),
               ],
