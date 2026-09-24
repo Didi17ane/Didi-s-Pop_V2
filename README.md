@@ -3,11 +3,11 @@
 [![CI](https://github.com/Didi17ane/Didi-s-Pop_V2/actions/workflows/ci.yml/badge.svg)](https://github.com/Didi17ane/Didi-s-Pop_V2/actions/workflows/ci.yml)
 
 
-Application Flutter pour suivre des K-dramas et des animés.
+Application Flutter pour suivre des K-dramas, des animés et autres.
 
 ## À propos du projet
 
-**Didi's Pop** est une application Flutter multi-écrans permettant de gérer et suivre une liste personnelle de K-dramas et d'animés préférés. L'application démontre les concepts fondamentaux de Flutter : navigation multi-écrans, gestion d'état, formulaires avec validation, passage de paramètres et adaptation au thème clair/sombre.
+**Didi's Pop** est une application Flutter multi-écrans permettant de gérer et suivre une liste personnelle de K-dramas et d'animés préférés et autres catégories. L'application démontre les concepts fondamentaux de Flutter : navigation multi-écrans, gestion d'état, formulaires avec validation, passage de paramètres et adaptation au thème clair/sombre.
 
 ### Fonctionnalités principales
 
@@ -112,6 +112,9 @@ Captures des écrans principaux du projet :
 ### Accueil
 ![Accueil](screenshots/acceuil.jpeg)
 
+### Filtres
+![Accueil](screenshots/filtres.jpeg)
+
 ### Recherche
 ![Recherche](screenshots/recherche.jpeg)
 
@@ -199,7 +202,7 @@ et pull request sur `main` :
 
 ## À propos
 
-Projet Flutter pour suivre des K-dramas et des animés, avec navigation, recherche, ajout d'éléments et thème clair/sombre.
+Projet Flutter pour suivre des K-dramas, des animés, etc..., avec navigation, recherche, ajout d'éléments et thème clair/sombre.
 
 ## Changelog
 

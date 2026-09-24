@@ -15,7 +15,6 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.x'
           channel: 'stable'
           cache: true
 
@@ -49,7 +48,6 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.x'
           channel: 'stable'
           cache: true
 
@@ -61,6 +59,9 @@ jobs:
 
       - name: Activer le support desktop Linux
         run: flutter config --enable-linux-desktop
+
+      - name: Générer le projet Linux (si absent du dépôt)
+        run: flutter create --platforms=linux .
 
       - name: Installer les dépendances système (GTK)
         run: |
