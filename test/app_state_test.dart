@@ -101,7 +101,8 @@ void main() {
       expect(appState.items.length, initialCount + 1);
     });
 
-    test('addCategory rejects an empty name, a duplicate, and enforces '
+    test(
+        'addCategory rejects an empty name, a duplicate, and enforces '
         'maxCategories', () async {
       final appState = AppState();
       await appState.load();

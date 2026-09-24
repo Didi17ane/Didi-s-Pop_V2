@@ -10,16 +10,15 @@ class DetailScreen extends StatelessWidget {
   final String itemId;
   final AppState appState;
 
-  const DetailScreen(
-      {super.key, required this.itemId, required this.appState});
+  const DetailScreen({super.key, required this.itemId, required this.appState});
 
   Future<void> _confirmDelete(BuildContext context, Watchable item) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Supprimer ce titre ?'),
-        content: Text(
-            '"${item.title}" sera définitivement supprimé de ta liste.'),
+        content:
+            Text('"${item.title}" sera définitivement supprimé de ta liste.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -27,8 +26,7 @@ class DetailScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Supprimer',
-                style: TextStyle(color: Colors.red)),
+            child: const Text('Supprimer', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -116,7 +114,8 @@ class DetailScreen extends StatelessWidget {
                         children: [
                           StarRating(value: current.rating / 2, size: 20),
                           const SizedBox(width: 8),
-                          Text('${(current.rating / 2).toStringAsFixed(1)} / 5'),
+                          Text(
+                              '${(current.rating / 2).toStringAsFixed(1)} / 5'),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -126,8 +125,8 @@ class DetailScreen extends StatelessWidget {
                           return ChoiceChip(
                             label: Text(status.label),
                             selected: current.status == status,
-                            onSelected: (_) => appState.updateItem(
-                                current.copyWith(status: status)),
+                            onSelected: (_) => appState
+                                .updateItem(current.copyWith(status: status)),
                           );
                         }).toList(),
                       ),

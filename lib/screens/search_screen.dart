@@ -38,7 +38,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildScaffold(List<Watchable> results) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.searchScreenTitle)),
+      appBar:
+          AppBar(title: Text(AppLocalizations.of(context)!.searchScreenTitle)),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
@@ -80,8 +81,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                     const SizedBox(
                                         width: 50,
                                         height: 70,
-                                        child: ColoredBox(
-                                            color: Colors.black12)),
+                                        child:
+                                            ColoredBox(color: Colors.black12)),
                               ),
                             ),
                             title: Text(item.title),
@@ -113,8 +114,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                 Text((item.rating / 2).toStringAsFixed(1)),
                               ],
                             ),
-                            onTap: () => context.push('/detail/${item.id}',
-                                extra: item),
+                            onTap: () =>
+                                context.push('/detail/${item.id}', extra: item),
                           ),
                         );
                       },

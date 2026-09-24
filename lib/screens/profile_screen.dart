@@ -88,8 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child:
-                const Text('Supprimer', style: TextStyle(color: Colors.red)),
+            child: const Text('Supprimer', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -117,7 +116,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
 
         return Scaffold(
-          appBar: AppBar(title: Text(AppLocalizations.of(context)!.profileScreenTitle)),
+          appBar: AppBar(
+              title: Text(AppLocalizations.of(context)!.profileScreenTitle)),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Column(

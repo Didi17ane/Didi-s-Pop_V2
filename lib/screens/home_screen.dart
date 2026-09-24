@@ -230,8 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SectionTitle(
-                    text: l10n.homeGreeting(widget.appState.userName)),
+                SectionTitle(text: l10n.homeGreeting(widget.appState.userName)),
                 const SizedBox(height: 8),
 
                 // Une seule ligne compacte : bouton Filtres (avec badge) +
@@ -275,8 +274,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               item: item,
                               category:
                                   widget.appState.categoryFor(item.categoryId),
-                              onTap: () => context
-                                  .push('/detail/${item.id}', extra: item),
+                              onTap: () => context.push('/detail/${item.id}',
+                                  extra: item),
                             );
                           },
                         ),

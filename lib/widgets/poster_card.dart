@@ -33,79 +33,81 @@ class PosterCard extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: l10n.posterCardSemanticLabel(item.title, category.name, statusLabel),
+      label:
+          l10n.posterCardSemanticLabel(item.title, category.name, statusLabel),
       child: Card(
-      clipBehavior: Clip.antiAlias,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: InkWell(
-        onTap: onTap,
-        child: ExcludeSemantics(
-          child: Stack(
-          fit: StackFit.expand,
-          children: [
-            CachedNetworkImage(
-              imageUrl: item.imageUrl,
-              fit: BoxFit.cover,
-              // Décode à une taille proche de celle affichée (au lieu de
-              // l'image plein format) pour réduire mémoire et jank dans la
-              // grille.
-              memCacheWidth: 400,
-              placeholder: (context, url) =>
-                  const Center(child: CircularProgressIndicator()),
-              errorWidget: (context, url, error) =>
-                  const ColoredBox(color: Colors.black12),
-            ),
-            Positioned(
-              top: 8,
-              left: 8,
-              child: CategoryChip(category: category),
-            ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: _StatusBadge(status: item.status, label: statusLabel),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black87],
-                  ),
+        clipBehavior: Clip.antiAlias,
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: InkWell(
+          onTap: onTap,
+          child: ExcludeSemantics(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                CachedNetworkImage(
+                  imageUrl: item.imageUrl,
+                  fit: BoxFit.cover,
+                  // Décode à une taille proche de celle affichée (au lieu de
+                  // l'image plein format) pour réduire mémoire et jank dans la
+                  // grille.
+                  memCacheWidth: 400,
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) =>
+                      const ColoredBox(color: Colors.black12),
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        item.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
+                Positioned(
+                  top: 8,
+                  left: 8,
+                  child: CategoryChip(category: category),
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: _StatusBadge(status: item.status, label: statusLabel),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.transparent, Colors.black87],
                       ),
                     ),
-                    const Icon(Icons.star, color: Colors.amber, size: 14),
-                    const SizedBox(width: 2),
-                    Text(
-                      (item.rating / 2).toStringAsFixed(1),
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            item.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const Icon(Icons.star, color: Colors.amber, size: 14),
+                        const SizedBox(width: 2),
+                        Text(
+                          (item.rating / 2).toStringAsFixed(1),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 12),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
           ),
         ),
-      ),
       ),
     );
   }

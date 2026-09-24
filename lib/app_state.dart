@@ -70,12 +70,15 @@ class AppState extends ChangeNotifier {
       );
       items = [
         for (var i = 0; i < seed.length; i++)
-          posters[i] != null ? seed[i].copyWith(imageUrl: posters[i]!) : seed[i],
+          posters[i] != null
+              ? seed[i].copyWith(imageUrl: posters[i]!)
+              : seed[i],
       ];
     }
 
-    themeMode =
-        prefs.getString(_kThemeKey) == 'dark' ? ThemeMode.dark : ThemeMode.light;
+    themeMode = prefs.getString(_kThemeKey) == 'dark'
+        ? ThemeMode.dark
+        : ThemeMode.light;
     userName = prefs.getString(_kNameKey) ?? 'Didiane';
 
     _isLoaded = true;
@@ -90,14 +93,15 @@ class AppState extends ChangeNotifier {
     for (final c in categories) {
       if (c.id == categoryId) return c;
     }
-    return AppCategory(id: categoryId, name: categoryId, colorValue: 0xFF9E9E9E);
+    return AppCategory(
+        id: categoryId, name: categoryId, colorValue: 0xFF9E9E9E);
   }
 
   /// Ajoute un titre. Retourne un message d'erreur si un titre du même nom
   /// existe déjà (comparaison insensible à la casse/espaces), sinon null.
   Future<String?> addItem(Watchable item) async {
-    final duplicate = items.any((w) =>
-        w.title.trim().toLowerCase() == item.title.trim().toLowerCase());
+    final duplicate = items.any(
+        (w) => w.title.trim().toLowerCase() == item.title.trim().toLowerCase());
     if (duplicate) {
       return '"${item.title}" est déjà dans ta liste.';
     }

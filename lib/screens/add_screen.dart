@@ -191,7 +191,8 @@ class _AddScreenState extends State<AddScreen> {
                               color: Colors.white,
                             ),
                           )
-                        : Text(_isEditing ? l10n.updateButton : l10n.saveButton),
+                        : Text(
+                            _isEditing ? l10n.updateButton : l10n.saveButton),
                   ),
                 ),
               ],

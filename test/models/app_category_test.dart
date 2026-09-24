@@ -3,8 +3,7 @@ import 'package:didis_pop/models/app_category.dart';
 
 void main() {
   group('AppCategory', () {
-    test('defaults() returns K-drama and Anime with their historical ids',
-        () {
+    test('defaults() returns K-drama and Anime with their historical ids', () {
       final defaults = AppCategory.defaults();
 
       expect(defaults.length, 2);
@@ -39,8 +38,7 @@ void main() {
     });
 
     test('color getter converts colorValue into a Color', () {
-      const category =
-          AppCategory(id: 'x', name: 'X', colorValue: 0xFFAABBCC);
+      const category = AppCategory(id: 'x', name: 'X', colorValue: 0xFFAABBCC);
 
       expect(category.color.toARGB32(), 0xFFAABBCC);
     });

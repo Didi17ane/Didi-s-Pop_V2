@@ -62,8 +62,7 @@ class SampleData {
         categoryId: 'anime',
         rating: 9.3,
         imageUrl: 'https://picsum.photos/seed/yourname/300/420',
-        synopsis:
-            'Deux adolescents échangent mystérieusement leurs corps et '
+        synopsis: 'Deux adolescents échangent mystérieusement leurs corps et '
             'tentent de se retrouver à travers le temps.',
       ),
     ];

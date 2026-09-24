@@ -70,8 +70,7 @@ class PosterService {
       final posterPath = map['poster_path'] as String?;
       // On ignore les résultats "person" (acteurs/actrices) et ceux sans
       // affiche disponible.
-      if ((mediaType == 'tv' || mediaType == 'movie') &&
-          posterPath != null) {
+      if ((mediaType == 'tv' || mediaType == 'movie') && posterPath != null) {
         return 'https://image.tmdb.org/t/p/w500$posterPath';
       }
     }
