@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app_state.dart';
+import 'l10n/app_localizations.dart';
 import 'router/app_router.dart';
 import 'theme/app_theme.dart';
 
@@ -49,6 +50,8 @@ class _DidisPopAppState extends State<DidisPopApp> {
         if (showSplash) {
           return const MaterialApp(
             debugShowCheckedModeBanner: false,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: SplashScreen(),
           );
         }
@@ -56,6 +59,8 @@ class _DidisPopAppState extends State<DidisPopApp> {
         return MaterialApp.router(
           title: "Didi's Pop",
           debugShowCheckedModeBanner: false,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),
           themeMode: _appState.themeMode,

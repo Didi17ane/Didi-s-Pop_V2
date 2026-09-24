@@ -57,16 +57,21 @@ class AppState extends ChangeNotifier {
       // prise en compte : Jikan pour "anime", TMDB pour le reste).
       // Si ça échoue (pas de connexion, pas encore de clé TMDB...), le
       // titre garde simplement son image de secours — rien ne bloque.
+      // Les appels partent tous en parallèle (Future.wait) plutôt qu'en
+      // séquence : sinon, avec un timeout de 8s par appel, un réseau lent
+      // ou absent peut faire traîner le premier lancement plusieurs
+      // dizaines de secondes au lieu de ~8s maximum.
       final seed = SampleData.initialList();
-      final resolved = <Watchable>[];
-      for (final w in seed) {
-        final found = await PosterService.fetchPosterFor(
-          title: w.title,
-          categoryId: w.categoryId,
-        );
-        resolved.add(found != null ? w.copyWith(imageUrl: found) : w);
-      }
-      items = resolved;
+      final posters = await Future.wait(
+        seed.map((w) => PosterService.fetchPosterFor(
+              title: w.title,
+              categoryId: w.categoryId,
+            )),
+      );
+      items = [
+        for (var i = 0; i < seed.length; i++)
+          posters[i] != null ? seed[i].copyWith(imageUrl: posters[i]!) : seed[i],
+      ];
     }
 
     themeMode =

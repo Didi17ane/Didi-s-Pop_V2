@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../app_state.dart';
+import '../l10n/app_localizations.dart';
 import '../models/watchable.dart';
 import '../services/poster_service.dart';
 import '../widgets/star_rating.dart';
@@ -96,9 +97,10 @@ class _AddScreenState extends State<AddScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isEditing ? 'Modifier le titre' : 'Ajouter un titre'),
+        title: Text(_isEditing ? l10n.editScreenTitle : l10n.addScreenTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -111,13 +113,13 @@ class _AddScreenState extends State<AddScreen> {
                 // Champ 1 : titre
                 TextFormField(
                   controller: _titleController,
-                  decoration: const InputDecoration(
-                    labelText: 'Titre',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.titleFieldLabel,
+                    border: const OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Le titre est obligatoire';
+                      return l10n.titleRequiredError;
                     }
                     return null;
                   },
@@ -126,9 +128,9 @@ class _AddScreenState extends State<AddScreen> {
                 // Champ 2 : catégorie
                 DropdownButtonFormField<String>(
                   initialValue: _categoryId,
-                  decoration: const InputDecoration(
-                    labelText: 'Catégorie',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.categoryFieldLabel,
+                    border: const OutlineInputBorder(),
                   ),
                   items: widget.appState.categories
                       .map((c) =>
@@ -189,7 +191,7 @@ class _AddScreenState extends State<AddScreen> {
                               color: Colors.white,
                             ),
                           )
-                        : Text(_isEditing ? 'Mettre à jour' : 'Enregistrer'),
+                        : Text(_isEditing ? l10n.updateButton : l10n.saveButton),
                   ),
                 ),
               ],

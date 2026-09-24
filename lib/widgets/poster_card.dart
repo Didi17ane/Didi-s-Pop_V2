@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../models/app_category.dart';
 import '../models/watchable.dart';
 import 'category_chip.dart';
@@ -22,23 +24,36 @@ class PosterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    final l10n = AppLocalizations.of(context)!;
+    final statusLabel = switch (item.status) {
+      WatchStatus.toWatch => l10n.statusToWatch,
+      WatchStatus.watching => l10n.statusWatching,
+      WatchStatus.watched => l10n.statusWatched,
+    };
+
+    return Semantics(
+      button: true,
+      label: l10n.posterCardSemanticLabel(item.title, category.name, statusLabel),
+      child: Card(
       clipBehavior: Clip.antiAlias,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: onTap,
-        child: Stack(
+        child: ExcludeSemantics(
+          child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(
-              item.imageUrl,
+            CachedNetworkImage(
+              imageUrl: item.imageUrl,
               fit: BoxFit.cover,
-              loadingBuilder: (context, child, progress) {
-                if (progress == null) return child;
-                return const Center(child: CircularProgressIndicator());
-              },
-              errorBuilder: (context, error, stackTrace) =>
+              // Décode à une taille proche de celle affichée (au lieu de
+              // l'image plein format) pour réduire mémoire et jank dans la
+              // grille.
+              memCacheWidth: 400,
+              placeholder: (context, url) =>
+                  const Center(child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) =>
                   const ColoredBox(color: Colors.black12),
             ),
             Positioned(
@@ -49,7 +64,7 @@ class PosterCard extends StatelessWidget {
             Positioned(
               top: 8,
               right: 8,
-              child: _StatusBadge(status: item.status),
+              child: _StatusBadge(status: item.status, label: statusLabel),
             ),
             Positioned(
               bottom: 0,
@@ -88,7 +103,9 @@ class PosterCard extends StatelessWidget {
               ),
             ),
           ],
+          ),
         ),
+      ),
       ),
     );
   }
@@ -98,8 +115,9 @@ class PosterCard extends StatelessWidget {
 /// vu), affiché en haut à droite de la carte.
 class _StatusBadge extends StatelessWidget {
   final WatchStatus status;
+  final String label;
 
-  const _StatusBadge({required this.status});
+  const _StatusBadge({required this.status, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +126,7 @@ class _StatusBadge extends StatelessWidget {
     switch (status) {
       case WatchStatus.toWatch:
         icon = Icons.bookmark_border;
-        color = Colors.white.withOpacity(0.85);
+        color = Colors.white.withValues(alpha: 0.85);
         break;
       case WatchStatus.watching:
         icon = Icons.play_circle_fill;
@@ -120,13 +138,16 @@ class _StatusBadge extends StatelessWidget {
         break;
     }
 
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Colors.black45,
-        borderRadius: BorderRadius.circular(20),
+    return Semantics(
+      label: label,
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: Colors.black45,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Icon(icon, color: color, size: 18),
       ),
-      child: Icon(icon, color: color, size: 18),
     );
   }
 }

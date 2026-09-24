@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../app_state.dart';
@@ -85,10 +86,13 @@ class DetailScreen extends StatelessWidget {
                   ),
                 ],
                 flexibleSpace: FlexibleSpaceBar(
-                  background: Image.network(
-                    current.imageUrl,
+                  background: CachedNetworkImage(
+                    imageUrl: current.imageUrl,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) =>
+                    // Taille d'écran plutôt que la résolution native de
+                    // l'affiche : suffisant pour un header, moins de mémoire.
+                    memCacheWidth: 800,
+                    errorWidget: (context, url, error) =>
                         const ColoredBox(color: Colors.black12),
                   ),
                 ),

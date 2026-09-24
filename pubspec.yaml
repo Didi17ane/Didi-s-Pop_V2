@@ -9,19 +9,26 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   go_router: ^14.2.0
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.3.2
   http: ^1.2.2
+  cached_network_image: ^3.4.1
+  intl: ^0.20.3
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
   flutter_lints: ^4.0.0
   flutter_launcher_icons: ^0.14.1
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/icon/app_icon.png
     - assets/avatar/default_avatar.png

@@ -25,7 +25,7 @@ void main() {
       await appState.load();
       final initialCount = appState.items.length;
 
-      final newItem = Watchable(
+      const newItem = Watchable(
         id: 'test-id',
         title: 'New Title',
         categoryId: 'kdrama',
@@ -69,6 +69,88 @@ void main() {
       final reloaded = AppState();
       await reloaded.load();
       expect(reloaded.userName, 'Marie');
+    });
+
+    test('addItem rejects a duplicate title (case/whitespace insensitive)',
+        () async {
+      final appState = AppState();
+      await appState.load();
+      final initialCount = appState.items.length;
+
+      const first = Watchable(
+        id: '1',
+        title: 'Test Show Alpha',
+        categoryId: 'kdrama',
+        rating: 9.0,
+        imageUrl: 'https://example.com/a.jpg',
+        synopsis: '...',
+      );
+      const duplicate = Watchable(
+        id: '2',
+        title: '  test show alpha  ',
+        categoryId: 'kdrama',
+        rating: 7.0,
+        imageUrl: 'https://example.com/b.jpg',
+        synopsis: '...',
+      );
+
+      expect(await appState.addItem(first), null);
+      final error = await appState.addItem(duplicate);
+
+      expect(error, isNotNull);
+      expect(appState.items.length, initialCount + 1);
+    });
+
+    test('addCategory rejects an empty name, a duplicate, and enforces '
+        'maxCategories', () async {
+      final appState = AppState();
+      await appState.load();
+      final initialCount = appState.categories.length;
+
+      expect(await appState.addCategory('   '), isNotNull);
+      expect(await appState.addCategory('K-drama'), isNotNull); // doublon
+      expect(appState.categories.length, initialCount);
+
+      // Remplit jusqu'à la limite.
+      String? lastError;
+      for (var i = 0; i < AppState.maxCategories + 2; i++) {
+        lastError = await appState.addCategory('Catégorie $i');
+      }
+
+      expect(appState.categories.length, AppState.maxCategories);
+      expect(lastError, isNotNull);
+    });
+
+    test('deleteCategory removes the category and its items', () async {
+      final appState = AppState();
+      await appState.load();
+
+      await appState.addCategory('Film');
+      final film = appState.categories.firstWhere((c) => c.name == 'Film');
+
+      final item = Watchable(
+        id: 'film-1',
+        title: 'Parasite',
+        categoryId: film.id,
+        rating: 9.0,
+        imageUrl: 'https://example.com/c.jpg',
+        synopsis: '...',
+      );
+      await appState.addItem(item);
+      expect(appState.itemCountForCategory(film.id), 1);
+
+      await appState.deleteCategory(film.id);
+
+      expect(appState.categories.any((c) => c.id == film.id), false);
+      expect(appState.items.any((w) => w.categoryId == film.id), false);
+    });
+
+    test('categoryFor returns a fallback category for an unknown id', () {
+      final appState = AppState();
+      final fallback = appState.categoryFor('does-not-exist');
+
+      expect(fallback.id, 'does-not-exist');
+      expect(fallback.name, 'does-not-exist');
     });
   });
 }

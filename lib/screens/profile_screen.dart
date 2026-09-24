@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../app_state.dart';
+import '../l10n/app_localizations.dart';
 import '../widgets/section_title.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -116,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
 
         return Scaffold(
-          appBar: AppBar(title: const Text('Profil')),
+          appBar: AppBar(title: Text(AppLocalizations.of(context)!.profileScreenTitle)),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -206,7 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SectionTitle(text: 'Préférences'),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const Text('Thème sombre'),
+                  title: Text(AppLocalizations.of(context)!.darkModeLabel),
                   value: widget.appState.themeMode == ThemeMode.dark,
                   onChanged: widget.appState.setDarkMode,
                 ),

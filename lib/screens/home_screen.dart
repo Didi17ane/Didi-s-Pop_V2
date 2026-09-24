@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../app_state.dart';
+import '../l10n/app_localizations.dart';
 import '../models/watchable.dart';
 import '../widgets/poster_card.dart';
 import '../widgets/section_title.dart';
@@ -47,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _openFiltersSheet() {
+    final l10n = AppLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -100,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     runSpacing: 8,
                     children: [
                       _FilterChip(
-                        label: 'Tous',
+                        label: l10n.filterAll,
                         selected: _filter == null,
                         onTap: () {
                           setState(() => _filter = null);
@@ -154,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     runSpacing: 8,
                     children: [
                       _FilterChip(
-                        label: 'Tous',
+                        label: l10n.filterAll,
                         selected: _statusFilter == null,
                         onTap: () {
                           setState(() => _statusFilter = null);
@@ -212,6 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Responsive : 2 colonnes en mobile, 4 en tablette (largeur > 600).
     final width = MediaQuery.of(context).size.width;
     final crossAxisCount = width > 600 ? 4 : 2;
+    final l10n = AppLocalizations.of(context)!;
 
     // AnimatedBuilder : dès qu'un titre est ajouté ou que le prénom change
     // dans AppState, cet écran se met à jour tout seul.
@@ -221,13 +224,14 @@ class _HomeScreenState extends State<HomeScreen> {
         final filtered = _processed(widget.appState.items);
 
         return Scaffold(
-          appBar: AppBar(title: const Text('Accueil')),
+          appBar: AppBar(title: Text(l10n.navHome)),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SectionTitle(text: 'Hiii ${widget.appState.userName}! 👋'),
+                SectionTitle(
+                    text: l10n.homeGreeting(widget.appState.userName)),
                 const SizedBox(height: 8),
 
                 // Une seule ligne compacte : bouton Filtres (avec badge) +

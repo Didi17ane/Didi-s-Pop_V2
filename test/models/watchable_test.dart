@@ -5,7 +5,7 @@ import 'package:didis_pop/models/app_category.dart';
 void main() {
   group('Watchable Model', () {
     test('Watchable creation with valid data', () {
-      final watchable = Watchable(
+      const watchable = Watchable(
         id: '1',
         title: 'Test Title',
         categoryId: 'kdrama',
@@ -29,7 +29,7 @@ void main() {
     });
 
     test('Rating can be 0 to 10', () {
-      final watchable1 = Watchable(
+      const watchable1 = Watchable(
         id: '1',
         title: 'Low Rating',
         categoryId: 'anime',
@@ -38,7 +38,7 @@ void main() {
         synopsis: 'Test',
       );
 
-      final watchable2 = Watchable(
+      const watchable2 = Watchable(
         id: '2',
         title: 'High Rating',
         categoryId: 'anime',

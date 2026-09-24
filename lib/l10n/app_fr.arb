@@ -1,0 +1,97 @@
+{
+  "@@locale": "fr",
+  "navHome": "Accueil",
+  "@navHome": {
+    "description": "Onglet Accueil dans la barre de navigation"
+  },
+  "navSearch": "Recherche",
+  "@navSearch": {
+    "description": "Onglet Recherche dans la barre de navigation"
+  },
+  "navProfile": "Profil",
+  "@navProfile": {
+    "description": "Onglet Profil dans la barre de navigation"
+  },
+  "addButton": "Ajouter",
+  "@addButton": {
+    "description": "Libellé du bouton flottant d'ajout"
+  },
+  "filterAll": "Tous",
+  "@filterAll": {
+    "description": "Filtre de catégorie : tous les titres"
+  },
+  "homeGreeting": "Hiii {name}! 👋",
+  "@homeGreeting": {
+    "description": "Message d'accueil personnalisé",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "addScreenTitle": "Ajouter un titre",
+  "@addScreenTitle": {
+    "description": "Titre de l'écran d'ajout"
+  },
+  "saveButton": "Enregistrer",
+  "@saveButton": {
+    "description": "Bouton de validation du formulaire d'ajout"
+  },
+  "profileScreenTitle": "Profil",
+  "@profileScreenTitle": {
+    "description": "Titre de l'écran de profil"
+  },
+  "darkModeLabel": "Thème sombre",
+  "@darkModeLabel": {
+    "description": "Libellé du switch de thème sombre"
+  },
+  "searchScreenTitle": "Recherche",
+  "@searchScreenTitle": {
+    "description": "Titre de l'écran de recherche"
+  },
+  "searchHint": "Rechercher un K-drama ou un anime...",
+  "@searchHint": {
+    "description": "Texte indicatif du champ de recherche"
+  },
+  "statusToWatch": "À voir",
+  "@statusToWatch": {
+    "description": "Statut de visionnage : à voir"
+  },
+  "statusWatching": "En cours",
+  "@statusWatching": {
+    "description": "Statut de visionnage : en cours"
+  },
+  "statusWatched": "Vu",
+  "@statusWatched": {
+    "description": "Statut de visionnage : vu"
+  },
+  "starRatingSemanticLabel": "Noter {value} sur 5",
+  "@starRatingSemanticLabel": {
+    "description": "Label d'accessibilité pour une étoile de notation",
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "posterCardSemanticLabel": "{title}, catégorie {category}, statut {status}",
+  "@posterCardSemanticLabel": {
+    "description": "Label d'accessibilité résumant une carte de titre",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "editScreenTitle": "Modifier le titre",
+  "updateButton": "Mettre à jour",
+  "titleFieldLabel": "Titre",
+  "titleRequiredError": "Le titre est obligatoire",
+  "categoryFieldLabel": "Catégorie"
+}

@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../app_state.dart';
+import '../l10n/app_localizations.dart';
 import '../models/watchable.dart';
 import '../widgets/category_chip.dart';
 
@@ -36,7 +38,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildScaffold(List<Watchable> results) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Recherche')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.searchScreenTitle)),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
@@ -44,7 +46,7 @@ class _SearchScreenState extends State<SearchScreen> {
             TextField(
               autofocus: false,
               decoration: InputDecoration(
-                hintText: 'Rechercher un K-drama ou un anime...',
+                hintText: AppLocalizations.of(context)!.searchHint,
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
                 border: OutlineInputBorder(
@@ -68,12 +70,13 @@ class _SearchScreenState extends State<SearchScreen> {
                             contentPadding: const EdgeInsets.all(8),
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                item.imageUrl,
+                              child: CachedNetworkImage(
+                                imageUrl: item.imageUrl,
                                 width: 50,
                                 height: 70,
                                 fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) =>
+                                memCacheWidth: 100,
+                                errorWidget: (context, url, error) =>
                                     const SizedBox(
                                         width: 50,
                                         height: 70,

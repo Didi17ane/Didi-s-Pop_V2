@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../app_state.dart';
+import '../l10n/app_localizations.dart';
 import 'home_screen.dart';
 import 'search_screen.dart';
 import 'profile_screen.dart';
@@ -21,6 +22,7 @@ class _RootShellState extends State<RootShell> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final screens = [
       HomeScreen(appState: widget.appState),
       SearchScreen(appState: widget.appState),
@@ -33,26 +35,26 @@ class _RootShellState extends State<RootShell> {
           ? FloatingActionButton.extended(
               onPressed: () => context.push('/add'),
               icon: const Icon(Icons.add),
-              label: const Text('Ajouter'),
+              label: Text(l10n.addButton),
             )
           : null,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
         onTap: (value) => setState(() => _index = value),
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Accueil',
+            icon: const Icon(Icons.home_outlined),
+            activeIcon: const Icon(Icons.home),
+            label: l10n.navHome,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Recherche',
+            icon: const Icon(Icons.search),
+            label: l10n.navSearch,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profil',
+            icon: const Icon(Icons.person_outline),
+            activeIcon: const Icon(Icons.person),
+            label: l10n.navProfile,
           ),
         ],
       ),
