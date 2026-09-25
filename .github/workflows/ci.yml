@@ -60,9 +60,6 @@ jobs:
       - name: Activer le support desktop Linux
         run: flutter config --enable-linux-desktop
 
-      - name: Générer le projet Linux (si absent du dépôt)
-        run: flutter create --platforms=linux .
-
       - name: Installer les dépendances système (GTK)
         run: |
           sudo apt-get update
